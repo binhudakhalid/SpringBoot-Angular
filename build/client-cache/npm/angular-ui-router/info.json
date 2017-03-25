@@ -1,0 +1,1665 @@
+{
+    "_attachments": {
+        
+    },
+    "_id": "angular-ui-router",
+    "_rev": "65-c30a23fe9051f29c2e1b2306d79a05f2",
+    "bugs": {
+        "url": "https://github.com/angular-ui/ui-router/issues"
+    },
+    "contributors": [
+        {
+            "email": "nate@radify.io",
+            "name": "Nate Abele",
+            "url": "https://github.com/nateabele"
+        },
+        {
+            "email": "christhielen@gmail.com",
+            "name": "Chris Thielen",
+            "url": "https://github.com/christopherthielen"
+        },
+        {
+            "name": "Tim Kindberg",
+            "url": "https://github.com/timkindberg"
+        },
+        {
+            "name": "Karsten Sperling",
+            "url": "https://github.com/ksperling"
+        }
+    ],
+    "description": "State-based routing for AngularJS",
+    "dist-tags": {
+        "latest": "0.3.1",
+        "next": "1.0.0-alpha.5"
+    },
+    "homepage": "http://angular-ui.github.com/",
+    "license": "MIT",
+    "maintainers": [
+        {
+            "email": "nate.abele@gmail.com",
+            "name": "nateabele"
+        },
+        {
+            "email": "proloser@hotmail.com",
+            "name": "ProLoser"
+        },
+        {
+            "email": "christopherthielen@sandgnat.com",
+            "name": "christopherthielen"
+        }
+    ],
+    "name": "angular-ui-router",
+    "readme": "# AngularUI Router &nbsp;[![Build Status](https://travis-ci.org/angular-ui/ui-router.svg?branch=master)](https://travis-ci.org/angular-ui/ui-router)\n\n#### The de-facto solution to flexible routing with nested views\n---\n**[Download 0.2.18](https://cdn.rawgit.com/angular-ui/ui-router/0.2.18/release/angular-ui-router.js)** (or **[Minified](https://cdn.rawgit.com/angular-ui/ui-router/0.2.18/release/angular-ui-router.min.js)**) **|**\n**[Guide](https://github.com/angular-ui/ui-router/wiki) |**\n**[API](http://angular-ui.github.io/ui-router/site) |**\n**[Sample](http://angular-ui.github.com/ui-router/sample/) ([Src](https://github.com/angular-ui/ui-router/tree/gh-pages/sample)) |**\n**[FAQ](https://github.com/angular-ui/ui-router/wiki/Frequently-Asked-Questions) |**\n**[Resources](#resources) |**\n**[Report an Issue](https://github.com/angular-ui/ui-router/blob/master/CONTRIBUTING.md#report-an-issue) |**\n**[Contribute](https://github.com/angular-ui/ui-router/blob/master/CONTRIBUTING.md#contribute) |**\n**[Help!](http://stackoverflow.com/questions/ask?tags=angularjs,angular-ui-router) |**\n**[Discuss](https://groups.google.com/forum/#!categories/angular-ui/router)**\n\n---\n\n*_Please help us out by testing the 1.0 alpha release!_* \n\n[1.0.0alpha0 Announcement](https://github.com/angular-ui/ui-router/releases/tag/1.0.0alpha0) ([Source  Code](https://github.com/angular-ui/ui-router/tree/master)) | [Sample App](http://ui-router.github.io/sample-app/) ([Source Code](https://github.com/ui-router/sample-app)) | [Known Issues](https://github.com/angular-ui/ui-router/issues?q=is%3Aissue+is%3Aopen+label%3A1.0)\n\n\n---\n\nAngularUI Router is a routing framework for [AngularJS](http://angularjs.org), which allows you to organize the\nparts of your interface into a [*state machine*](https://en.wikipedia.org/wiki/Finite-state_machine). Unlike the\n[`$route` service](http://docs.angularjs.org/api/ngRoute.$route) in the Angular ngRoute module, which is organized around URL\nroutes, UI-Router is organized around [*states*](https://github.com/angular-ui/ui-router/wiki),\nwhich may optionally have routes, as well as other behavior, attached.\n\nStates are bound to *named*, *nested* and *parallel views*, allowing you to powerfully manage your application's interface.\n\nCheck out the sample app: http://angular-ui.github.io/ui-router/sample/\n\n-\n**Note:** *UI-Router is under active development. As such, while this library is well-tested, the API may change. Consider using it in production applications only if you're comfortable following a changelog and updating your usage accordingly.*\n\n\n## Get Started\n\n**(1)** Get UI-Router in one of the following ways:\n - clone & [build](CONTRIBUTING.md#developing) this repository\n - [download the release](http://angular-ui.github.io/ui-router/release/angular-ui-router.js) (or [minified](http://angular-ui.github.io/ui-router/release/angular-ui-router.min.js))\n - [link to cdn](http://cdnjs.com/libraries/angular-ui-router)\n - via **[jspm](http://jspm.io/)**: by running `$ jspm install angular-ui-router` from your console\n - or via **[npm](https://www.npmjs.org/)**: by running `$ npm install angular-ui-router` from your console\n - or via **[Bower](http://bower.io/)**: by running `$ bower install angular-ui-router` from your console\n - or via **[Component](https://github.com/component/component)**: by running `$ component install angular-ui/ui-router` from your console\n\n**(2)** Include `angular-ui-router.js` (or `angular-ui-router.min.js`) in your `index.html`, after including Angular itself (For Component users: ignore this step)\n\n**(3)** Add `'ui.router'` to your main module's list of dependencies (For Component users: replace `'ui.router'` with `require('angular-ui-router')`)\n\nWhen you're done, your setup should look similar to the following:\n\n>\n```html\n<!doctype html>\n<html ng-app=\"myApp\">\n<head>\n    <script src=\"//ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js\"></script>\n    <script src=\"js/angular-ui-router.min.js\"></script>\n    <script>\n        var myApp = angular.module('myApp', ['ui.router']);\n        // For Component users, it should look like this:\n        // var myApp = angular.module('myApp', [require('angular-ui-router')]);\n    </script>\n    ...\n</head>\n<body>\n    ...\n</body>\n</html>\n```\n\n### [Nested States & Views](http://plnkr.co/edit/u18KQc?p=preview)\n\nThe majority of UI-Router's power is in its ability to nest states & views.\n\n**(1)** First, follow the [setup](#get-started) instructions detailed above.\n\n**(2)** Then, add a [`ui-view` directive](https://github.com/angular-ui/ui-router/wiki/Quick-Reference#ui-view) to the `<body />` of your app.\n\n>\n```html\n<!-- index.html -->\n<body>\n    <div ui-view></div>\n    <!-- We'll also add some navigation: -->\n    <a ui-sref=\"state1\">State 1</a>\n    <a ui-sref=\"state2\">State 2</a>\n</body>\n```\n\n**(3)** You'll notice we also added some links with [`ui-sref` directives](https://github.com/angular-ui/ui-router/wiki/Quick-Reference#ui-sref). In addition to managing state transitions, this directive auto-generates the `href` attribute of the `<a />` element it's attached to, if the corresponding state has a URL. Next we'll add some templates. These will plug into the `ui-view` within `index.html`. Notice that they have their own `ui-view` as well! That is the key to nesting states and views.\n\n>\n```html\n<!-- partials/state1.html -->\n<h1>State 1</h1>\n<hr/>\n<a ui-sref=\"state1.list\">Show List</a>\n<div ui-view></div>\n```\n```html\n<!-- partials/state2.html -->\n<h1>State 2</h1>\n<hr/>\n<a ui-sref=\"state2.list\">Show List</a>\n<div ui-view></div>\n```\n\n**(4)** Next, we'll add some child templates. *These* will get plugged into the `ui-view` of their parent state templates.\n\n>\n```html\n<!-- partials/state1.list.html -->\n<h3>List of State 1 Items</h3>\n<ul>\n  <li ng-repeat=\"item in items\">{{ item }}</li>\n</ul>\n```\n\n>\n```html\n<!-- partials/state2.list.html -->\n<h3>List of State 2 Things</h3>\n<ul>\n  <li ng-repeat=\"thing in things\">{{ thing }}</li>\n</ul>\n```\n\n**(5)** Finally, we'll wire it all up with `$stateProvider`. Set up your states in the module config, as in the following:\n\n\n>\n```javascript\nmyApp.config(function($stateProvider, $urlRouterProvider) {\n  //\n  // For any unmatched url, redirect to /state1\n  $urlRouterProvider.otherwise(\"/state1\");\n  //\n  // Now set up the states\n  $stateProvider\n    .state('state1', {\n      url: \"/state1\",\n      templateUrl: \"partials/state1.html\"\n    })\n    .state('state1.list', {\n      url: \"/list\",\n      templateUrl: \"partials/state1.list.html\",\n      controller: function($scope) {\n        $scope.items = [\"A\", \"List\", \"Of\", \"Items\"];\n      }\n    })\n    .state('state2', {\n      url: \"/state2\",\n      templateUrl: \"partials/state2.html\"\n    })\n    .state('state2.list', {\n      url: \"/list\",\n      templateUrl: \"partials/state2.list.html\",\n      controller: function($scope) {\n        $scope.things = [\"A\", \"Set\", \"Of\", \"Things\"];\n      }\n    });\n});\n```\n\n**(6)** See this quick start example in action.\n>**[Go to Quick Start Plunker for Nested States & Views](http://plnkr.co/edit/u18KQc?p=preview)**\n\n**(7)** This only scratches the surface\n>**[Dive Deeper!](https://github.com/angular-ui/ui-router/wiki)**\n\n\n### [Multiple & Named Views](http://plnkr.co/edit/SDOcGS?p=preview)\n\nAnother great feature is the ability to have multiple `ui-view`s view per template.\n\n**Pro Tip:** *While multiple parallel views are a powerful feature, you'll often be able to manage your\ninterfaces more effectively by nesting your views, and pairing those views with nested states.*\n\n**(1)** Follow the [setup](#get-started) instructions detailed above.\n\n**(2)** Add one or more `ui-view` to your app, give them names.\n>\n```html\n<!-- index.html -->\n<body>\n    <div ui-view=\"viewA\"></div>\n    <div ui-view=\"viewB\"></div>\n    <!-- Also a way to navigate -->\n    <a ui-sref=\"route1\">Route 1</a>\n    <a ui-sref=\"route2\">Route 2</a>\n</body>\n```\n\n**(3)** Set up your states in the module config:\n>\n```javascript\nmyApp.config(function($stateProvider) {\n  $stateProvider\n    .state('index', {\n      url: \"\",\n      views: {\n        \"viewA\": { template: \"index.viewA\" },\n        \"viewB\": { template: \"index.viewB\" }\n      }\n    })\n    .state('route1', {\n      url: \"/route1\",\n      views: {\n        \"viewA\": { template: \"route1.viewA\" },\n        \"viewB\": { template: \"route1.viewB\" }\n      }\n    })\n    .state('route2', {\n      url: \"/route2\",\n      views: {\n        \"viewA\": { template: \"route2.viewA\" },\n        \"viewB\": { template: \"route2.viewB\" }\n      }\n    })\n});\n```\n\n**(4)** See this quick start example in action.\n>**[Go to Quick Start Plunker for Multiple & Named Views](http://plnkr.co/edit/SDOcGS?p=preview)**\n\n\n## Resources\n\n* [In-Depth Guide](https://github.com/angular-ui/ui-router/wiki)\n* [API Reference](http://angular-ui.github.io/ui-router/site)\n* [Sample App](http://angular-ui.github.com/ui-router/sample/) ([Source](https://github.com/angular-ui/ui-router/tree/gh-pages/sample))\n* [FAQ](https://github.com/angular-ui/ui-router/wiki/Frequently-Asked-Questions)\n* [Slides comparing ngRoute to ui-router](http://slid.es/timkindberg/ui-router#/)\n* [UI-Router Extras / Addons](http://christopherthielen.github.io/ui-router-extras/#/home) (@christopherthielen)\n \n### Videos\n\n* [Introduction Video](https://egghead.io/lessons/angularjs-introduction-ui-router) (egghead.io)\n* [Tim Kindberg on Angular UI-Router](https://www.youtube.com/watch?v=lBqiZSemrqg)\n* [Activating States](https://egghead.io/lessons/angularjs-ui-router-activating-states) (egghead.io)\n* [Learn Angular.js using UI-Router](http://youtu.be/QETUuZ27N0w) (LearnCode.academy)\n\n\n\n## Reporting issues and Contributing\n\nPlease read our [Contributor guidelines](CONTRIBUTING.md) before reporting an issue or creating a pull request.\n",
+    "readmeFilename": "README.md",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/angular-ui/ui-router.git"
+    },
+    "time": {
+        "0.2.10": "2014-03-19T23:15:03.310Z",
+        "0.2.11": "2014-10-01T15:27:48.876Z",
+        "0.2.13": "2014-12-20T03:46:28.671Z",
+        "0.2.14": "2015-04-24T03:55:01.709Z",
+        "0.2.15": "2015-05-19T13:00:26.648Z",
+        "0.2.16": "2016-01-24T21:25:41.837Z",
+        "0.2.17": "2016-01-26T15:44:54.426Z",
+        "0.2.18": "2016-02-07T16:27:36.699Z",
+        "0.2.7": "2013-12-20T00:58:25.346Z",
+        "0.2.8": "2014-02-04T21:06:26.230Z",
+        "0.3.0": "2016-05-14T23:13:40.570Z",
+        "0.3.1": "2016-06-03T21:05:17.293Z",
+        "1.0.0-alpha.1": "2016-03-27T21:15:34.153Z",
+        "1.0.0-alpha.2": "2016-04-03T06:35:04.609Z",
+        "1.0.0-alpha.3": "2016-04-03T06:59:45.369Z",
+        "1.0.0-alpha.4": "2016-04-06T05:06:48.067Z",
+        "1.0.0-alpha.5": "2016-05-13T01:36:42.917Z",
+        "1.0.0-alpha0": "2016-01-01T03:42:55.978Z",
+        "created": "2013-12-20T00:58:23.907Z",
+        "modified": "2016-06-09T00:58:39.679Z"
+    },
+    "users": {
+        "770554403": true,
+        "beingmalin": true,
+        "bpatel": true,
+        "callidon": true,
+        "christopherthielen": true,
+        "dnik": true,
+        "dongguangming": true,
+        "drdanryan": true,
+        "faelcorreia": true,
+        "filipedeschamps": true,
+        "kikar": true,
+        "martinlorensen": true,
+        "mezeitamas": true,
+        "mngaw20": true,
+        "moosecouture": true,
+        "openam": true,
+        "petecemi": true,
+        "ridermansb": true,
+        "rosterloh": true,
+        "sahilsk": true,
+        "sunkeyhub": true,
+        "toogle": true
+    },
+    "versions": {
+        "0.2.10": {
+            "_from": ".",
+            "_id": "angular-ui-router@0.2.10",
+            "_npmUser": {
+                "email": "nate.abele@gmail.com",
+                "name": "nateabele"
+            },
+            "_npmVersion": "1.3.9",
+            "bugs": {
+                "url": "https://github.com/angular-ui/ui-router/issues"
+            },
+            "contributors": [
+                {
+                    "email": "nate@unionofrad.com",
+                    "name": "Nate Abele",
+                    "url": "https://github.com/nateabele"
+                },
+                {
+                    "name": "Tim Kindberg",
+                    "url": "https://github.com/timkindberg"
+                },
+                {
+                    "name": "Karsten Sperling",
+                    "url": "https://github.com/ksperling"
+                }
+            ],
+            "dependencies": {
+                
+            },
+            "description": "State-based routing for AngularJS",
+            "devDependencies": {
+                "faithful-exec": "~0.1.0",
+                "grunt": "~0.4.1",
+                "grunt-contrib-clean": "~0.5.0",
+                "grunt-contrib-concat": "~0.3.0",
+                "grunt-contrib-connect": "~0.7.1",
+                "grunt-contrib-jshint": "~0.8.0",
+                "grunt-contrib-uglify": "~0.4.0",
+                "grunt-contrib-watch": "~0.5.3",
+                "grunt-conventional-changelog": "~1.1.0",
+                "grunt-karma": "~0.6.2",
+                "grunt-ngdocs": "~0.1.7",
+                "jsdoc": "git://github.com/jsdoc3/jsdoc.git#v3.2.2",
+                "karma": "~0.10.4",
+                "karma-chrome-launcher": "~0.1.0",
+                "karma-coffee-preprocessor": "~0.1.0",
+                "karma-firefox-launcher": "~0.1.0",
+                "karma-html2js-preprocessor": "~0.1.0",
+                "karma-jasmine": "~0.1.3",
+                "karma-phantomjs-launcher": "~0.1.0",
+                "karma-requirejs": "~0.2.0",
+                "karma-script-launcher": "~0.1.0",
+                "load-grunt-tasks": "~0.4.0",
+                "shelljs": "~0.2.6"
+            },
+            "directories": {
+                
+            },
+            "dist": {
+                "shasum": "30bed752481458402f1adb059372af6f89d02291",
+                "tarball": "https://registry.npmjs.org/angular-ui-router/-/angular-ui-router-0.2.10.tgz"
+            },
+            "homepage": "http://angular-ui.github.com/",
+            "licenses": [
+                {
+                    "type": "MIT",
+                    "url": "https://github.com/angular-ui/ui-router/blob/master/LICENSE"
+                }
+            ],
+            "main": "release/angular-ui-router",
+            "maintainers": [
+                {
+                    "email": "me@maxedmands.com",
+                    "name": "demands"
+                },
+                {
+                    "email": "jesus@sevein.com",
+                    "name": "sevein"
+                },
+                {
+                    "email": "open-source@goodeggs.com",
+                    "name": "goodeggs"
+                },
+                {
+                    "email": "nate.abele@gmail.com",
+                    "name": "nateabele"
+                }
+            ],
+            "name": "angular-ui-router",
+            "repository": {
+                "type": "git",
+                "url": "https://github.com/angular-ui/ui-router.git"
+            },
+            "version": "0.2.10"
+        },
+        "0.2.11": {
+            "_from": ".",
+            "_id": "angular-ui-router@0.2.11",
+            "_npmUser": {
+                "email": "nate.abele@gmail.com",
+                "name": "nateabele"
+            },
+            "_npmVersion": "1.5.0-alpha-1",
+            "_shasum": "69d5c0f413d732b9f57aa8351346be2d6805ac63",
+            "bugs": {
+                "url": "https://github.com/angular-ui/ui-router/issues"
+            },
+            "contributors": [
+                {
+                    "email": "nate@unionofrad.com",
+                    "name": "Nate Abele",
+                    "url": "https://github.com/nateabele"
+                },
+                {
+                    "name": "Tim Kindberg",
+                    "url": "https://github.com/timkindberg"
+                },
+                {
+                    "name": "Karsten Sperling",
+                    "url": "https://github.com/ksperling"
+                }
+            ],
+            "dependencies": {
+                
+            },
+            "description": "State-based routing for AngularJS",
+            "devDependencies": {
+                "faithful-exec": "~0.1.0",
+                "grunt": "~0.4.1",
+                "grunt-contrib-clean": "~0.5.0",
+                "grunt-contrib-concat": "~0.3.0",
+                "grunt-contrib-connect": "~0.7.1",
+                "grunt-contrib-jshint": "~0.8.0",
+                "grunt-contrib-uglify": "~0.4.0",
+                "grunt-contrib-watch": "~0.5.3",
+                "grunt-conventional-changelog": "~1.1.0",
+                "grunt-karma": "~0.6.2",
+                "grunt-ngdocs": "~0.1.7",
+                "jsdoc": "git://github.com/jsdoc3/jsdoc.git#v3.2.2",
+                "karma": "~0.10.4",
+                "karma-chrome-launcher": "~0.1.0",
+                "karma-coffee-preprocessor": "~0.1.0",
+                "karma-firefox-launcher": "~0.1.0",
+                "karma-html2js-preprocessor": "~0.1.0",
+                "karma-jasmine": "~0.1.3",
+                "karma-phantomjs-launcher": "~0.1.0",
+                "karma-requirejs": "~0.2.0",
+                "karma-script-launcher": "~0.1.0",
+                "load-grunt-tasks": "~0.4.0",
+                "shelljs": "~0.2.6"
+            },
+            "directories": {
+                
+            },
+            "dist": {
+                "shasum": "69d5c0f413d732b9f57aa8351346be2d6805ac63",
+                "tarball": "https://registry.npmjs.org/angular-ui-router/-/angular-ui-router-0.2.11.tgz"
+            },
+            "gitHead": "9837c09fb83653a4aebdefc771518323211a92c1",
+            "homepage": "http://angular-ui.github.com/",
+            "licenses": [
+                {
+                    "type": "MIT",
+                    "url": "https://github.com/angular-ui/ui-router/blob/master/LICENSE"
+                }
+            ],
+            "main": "release/angular-ui-router",
+            "maintainers": [
+                {
+                    "email": "me@maxedmands.com",
+                    "name": "demands"
+                },
+                {
+                    "email": "jesus@sevein.com",
+                    "name": "sevein"
+                },
+                {
+                    "email": "open-source@goodeggs.com",
+                    "name": "goodeggs"
+                },
+                {
+                    "email": "nate.abele@gmail.com",
+                    "name": "nateabele"
+                }
+            ],
+            "name": "angular-ui-router",
+            "repository": {
+                "type": "git",
+                "url": "https://github.com/angular-ui/ui-router.git"
+            },
+            "scripts": {
+                
+            },
+            "version": "0.2.11"
+        },
+        "0.2.13": {
+            "_from": ".",
+            "_id": "angular-ui-router@0.2.13",
+            "_nodeVersion": "0.10.30",
+            "_npmUser": {
+                "email": "nate.abele@gmail.com",
+                "name": "nateabele"
+            },
+            "_npmVersion": "2.1.9",
+            "_shasum": "ab40c2f9fef9b8626ffdb29a793426c1fedd2f29",
+            "bugs": {
+                "url": "https://github.com/angular-ui/ui-router/issues"
+            },
+            "contributors": [
+                {
+                    "email": "nate@unionofrad.com",
+                    "name": "Nate Abele",
+                    "url": "https://github.com/nateabele"
+                },
+                {
+                    "name": "Tim Kindberg",
+                    "url": "https://github.com/timkindberg"
+                },
+                {
+                    "name": "Karsten Sperling",
+                    "url": "https://github.com/ksperling"
+                }
+            ],
+            "dependencies": {
+                
+            },
+            "description": "State-based routing for AngularJS",
+            "devDependencies": {
+                "faithful-exec": "~0.1.0",
+                "grunt": "~0.4.1",
+                "grunt-contrib-clean": "~0.5.0",
+                "grunt-contrib-concat": "~0.3.0",
+                "grunt-contrib-connect": "~0.7.1",
+                "grunt-contrib-jshint": "~0.8.0",
+                "grunt-contrib-uglify": "~0.4.0",
+                "grunt-contrib-watch": "~0.5.3",
+                "grunt-conventional-changelog": "~1.1.0",
+                "grunt-karma": "~0.6.2",
+                "grunt-ngdocs": "git://github.com/christopherthielen/grunt-ngdocs#issue-86",
+                "jsdoc": "git://github.com/jsdoc3/jsdoc.git#v3.2.2",
+                "karma": "~0.10.4",
+                "karma-chrome-launcher": "~0.1.0",
+                "karma-coffee-preprocessor": "~0.1.0",
+                "karma-firefox-launcher": "~0.1.0",
+                "karma-html2js-preprocessor": "~0.1.0",
+                "karma-jasmine": "~0.1.3",
+                "karma-phantomjs-launcher": "~0.1.0",
+                "karma-requirejs": "~0.2.0",
+                "karma-script-launcher": "~0.1.0",
+                "load-grunt-tasks": "~0.4.0",
+                "shelljs": "~0.2.6"
+            },
+            "directories": {
+                
+            },
+            "dist": {
+                "shasum": "ab40c2f9fef9b8626ffdb29a793426c1fedd2f29",
+                "tarball": "https://registry.npmjs.org/angular-ui-router/-/angular-ui-router-0.2.13.tgz"
+            },
+            "gitHead": "c3d543aae43d4600512520a0d70723ac31f2cb62",
+            "homepage": "http://angular-ui.github.com/",
+            "licenses": [
+                {
+                    "type": "MIT",
+                    "url": "https://github.com/angular-ui/ui-router/blob/master/LICENSE"
+                }
+            ],
+            "main": "release/angular-ui-router.js",
+            "maintainers": [
+                {
+                    "email": "me@maxedmands.com",
+                    "name": "demands"
+                },
+                {
+                    "email": "jesus@sevein.com",
+                    "name": "sevein"
+                },
+                {
+                    "email": "open-source@goodeggs.com",
+                    "name": "goodeggs"
+                },
+                {
+                    "email": "nate.abele@gmail.com",
+                    "name": "nateabele"
+                }
+            ],
+            "name": "angular-ui-router",
+            "repository": {
+                "type": "git",
+                "url": "https://github.com/angular-ui/ui-router.git"
+            },
+            "scripts": {
+                
+            },
+            "version": "0.2.13"
+        },
+        "0.2.14": {
+            "_from": ".",
+            "_id": "angular-ui-router@0.2.14",
+            "_nodeVersion": "1.7.1",
+            "_npmUser": {
+                "email": "nate.abele@gmail.com",
+                "name": "nateabele"
+            },
+            "_npmVersion": "2.7.6",
+            "_shasum": "efe5920bbd3b8acffde5bb0573065199c2a17357",
+            "bugs": {
+                "url": "https://github.com/angular-ui/ui-router/issues"
+            },
+            "contributors": [
+                {
+                    "email": "nate@unionofrad.com",
+                    "name": "Nate Abele",
+                    "url": "https://github.com/nateabele"
+                },
+                {
+                    "name": "Tim Kindberg",
+                    "url": "https://github.com/timkindberg"
+                },
+                {
+                    "name": "Karsten Sperling",
+                    "url": "https://github.com/ksperling"
+                }
+            ],
+            "dependencies": {
+                
+            },
+            "description": "State-based routing for AngularJS",
+            "devDependencies": {
+                "faithful-exec": "~0.1.0",
+                "grunt": "~0.4.1",
+                "grunt-contrib-clean": "~0.5.0",
+                "grunt-contrib-concat": "~0.3.0",
+                "grunt-contrib-connect": "~0.7.1",
+                "grunt-contrib-jshint": "~0.8.0",
+                "grunt-contrib-uglify": "~0.4.0",
+                "grunt-contrib-watch": "~0.5.3",
+                "grunt-conventional-changelog": "~1.1.0",
+                "grunt-karma": "~0.6.2",
+                "grunt-ngdocs": "~0.2.5",
+                "karma": "~0.10.4",
+                "karma-chrome-launcher": "~0.1.0",
+                "karma-coffee-preprocessor": "~0.1.0",
+                "karma-firefox-launcher": "~0.1.0",
+                "karma-html2js-preprocessor": "~0.1.0",
+                "karma-jasmine": "~0.1.3",
+                "karma-phantomjs-launcher": "~0.1.0",
+                "karma-requirejs": "~0.2.0",
+                "karma-script-launcher": "~0.1.0",
+                "load-grunt-tasks": "~0.4.0",
+                "shelljs": "~0.2.6"
+            },
+            "directories": {
+                
+            },
+            "dist": {
+                "shasum": "efe5920bbd3b8acffde5bb0573065199c2a17357",
+                "tarball": "https://registry.npmjs.org/angular-ui-router/-/angular-ui-router-0.2.14.tgz"
+            },
+            "gitHead": "da63b27b7bbd13d2633b68fa74606f977e6d4147",
+            "homepage": "http://angular-ui.github.com/",
+            "licenses": [
+                {
+                    "type": "MIT",
+                    "url": "https://github.com/angular-ui/ui-router/blob/master/LICENSE"
+                }
+            ],
+            "main": "release/angular-ui-router.js",
+            "maintainers": [
+                {
+                    "email": "nate.abele@gmail.com",
+                    "name": "nateabele"
+                },
+                {
+                    "email": "proloser@hotmail.com",
+                    "name": "ProLoser"
+                },
+                {
+                    "email": "christopherthielen@sandgnat.com",
+                    "name": "christopherthielen"
+                }
+            ],
+            "name": "angular-ui-router",
+            "repository": {
+                "type": "git",
+                "url": "https://github.com/angular-ui/ui-router.git"
+            },
+            "scripts": {
+                
+            },
+            "version": "0.2.14"
+        },
+        "0.2.15": {
+            "_from": ".",
+            "_id": "angular-ui-router@0.2.15",
+            "_npmUser": {
+                "email": "christopherthielen@ikkyikkyikkypikangzoopboing.com",
+                "name": "christopherthielen"
+            },
+            "_npmVersion": "1.4.3",
+            "bugs": {
+                "url": "https://github.com/angular-ui/ui-router/issues"
+            },
+            "contributors": [
+                {
+                    "email": "nate@unionofrad.com",
+                    "name": "Nate Abele",
+                    "url": "https://github.com/nateabele"
+                },
+                {
+                    "name": "Tim Kindberg",
+                    "url": "https://github.com/timkindberg"
+                },
+                {
+                    "name": "Karsten Sperling",
+                    "url": "https://github.com/ksperling"
+                }
+            ],
+            "dependencies": {
+                
+            },
+            "description": "State-based routing for AngularJS",
+            "devDependencies": {
+                "faithful-exec": "~0.1.0",
+                "grunt": "~0.4.1",
+                "grunt-contrib-clean": "~0.5.0",
+                "grunt-contrib-concat": "~0.3.0",
+                "grunt-contrib-connect": "~0.7.1",
+                "grunt-contrib-jshint": "~0.8.0",
+                "grunt-contrib-uglify": "~0.4.0",
+                "grunt-contrib-watch": "~0.5.3",
+                "grunt-conventional-changelog": "~1.1.0",
+                "grunt-karma": "~0.6.2",
+                "grunt-ngdocs": "~0.2.5",
+                "karma": "~0.10.4",
+                "karma-chrome-launcher": "~0.1.0",
+                "karma-coffee-preprocessor": "~0.1.0",
+                "karma-firefox-launcher": "~0.1.0",
+                "karma-html2js-preprocessor": "~0.1.0",
+                "karma-jasmine": "~0.1.3",
+                "karma-phantomjs-launcher": "~0.1.0",
+                "karma-requirejs": "~0.2.0",
+                "karma-script-launcher": "~0.1.0",
+                "load-grunt-tasks": "~0.4.0",
+                "shelljs": "~0.2.6"
+            },
+            "directories": {
+                
+            },
+            "dist": {
+                "shasum": "87b61ba8f2bce85895c6679a0f93f0ab976cbae5",
+                "tarball": "https://registry.npmjs.org/angular-ui-router/-/angular-ui-router-0.2.15.tgz"
+            },
+            "homepage": "http://angular-ui.github.com/",
+            "licenses": [
+                {
+                    "type": "MIT",
+                    "url": "https://github.com/angular-ui/ui-router/blob/master/LICENSE"
+                }
+            ],
+            "main": "release/angular-ui-router.js",
+            "maintainers": [
+                {
+                    "email": "nate.abele@gmail.com",
+                    "name": "nateabele"
+                },
+                {
+                    "email": "proloser@hotmail.com",
+                    "name": "ProLoser"
+                },
+                {
+                    "email": "christopherthielen@sandgnat.com",
+                    "name": "christopherthielen"
+                }
+            ],
+            "name": "angular-ui-router",
+            "repository": {
+                "type": "git",
+                "url": "https://github.com/angular-ui/ui-router.git"
+            },
+            "version": "0.2.15"
+        },
+        "0.2.16": {
+            "_from": ".",
+            "_id": "angular-ui-router@0.2.16",
+            "_nodeVersion": "5.4.0",
+            "_npmUser": {
+                "email": "christopherthielen@ikkyikkyikkypikangzoopboing.com",
+                "name": "christopherthielen"
+            },
+            "_npmVersion": "3.3.12",
+            "_shasum": "6c86cf39d080c78825a0d199b3e2544a4484cf53",
+            "bugs": {
+                "url": "https://github.com/angular-ui/ui-router/issues"
+            },
+            "contributors": [
+                {
+                    "email": "nate@unionofrad.com",
+                    "name": "Nate Abele",
+                    "url": "https://github.com/nateabele"
+                },
+                {
+                    "name": "Tim Kindberg",
+                    "url": "https://github.com/timkindberg"
+                },
+                {
+                    "name": "Karsten Sperling",
+                    "url": "https://github.com/ksperling"
+                }
+            ],
+            "dependencies": {
+                
+            },
+            "description": "State-based routing for AngularJS",
+            "devDependencies": {
+                "faithful-exec": "~0.1.0",
+                "grunt": "~0.4.1",
+                "grunt-contrib-clean": "~0.5.0",
+                "grunt-contrib-concat": "~0.3.0",
+                "grunt-contrib-connect": "~0.7.1",
+                "grunt-contrib-jshint": "~0.8.0",
+                "grunt-contrib-uglify": "~0.4.0",
+                "grunt-contrib-watch": "~0.5.3",
+                "grunt-conventional-changelog": "~1.1.0",
+                "grunt-karma": "~0.6.2",
+                "grunt-ngdocs": "~0.2.5",
+                "karma": "~0.10.4",
+                "karma-chrome-launcher": "~0.1.0",
+                "karma-coffee-preprocessor": "~0.1.0",
+                "karma-firefox-launcher": "~0.1.0",
+                "karma-html2js-preprocessor": "~0.1.0",
+                "karma-jasmine": "~0.1.3",
+                "karma-phantomjs-launcher": "~0.1.0",
+                "karma-requirejs": "~0.2.0",
+                "karma-script-launcher": "~0.1.0",
+                "load-grunt-tasks": "~0.4.0",
+                "requirejs": "^2.1.22",
+                "shelljs": "~0.2.6"
+            },
+            "directories": {
+                
+            },
+            "dist": {
+                "shasum": "6c86cf39d080c78825a0d199b3e2544a4484cf53",
+                "tarball": "https://registry.npmjs.org/angular-ui-router/-/angular-ui-router-0.2.16.tgz"
+            },
+            "gitHead": "6ab44725ea1c58d096fd24e481ef92e3174bb058",
+            "homepage": "http://angular-ui.github.com/",
+            "licenses": [
+                {
+                    "type": "MIT",
+                    "url": "https://github.com/angular-ui/ui-router/blob/master/LICENSE"
+                }
+            ],
+            "main": "release/angular-ui-router.js",
+            "maintainers": [
+                {
+                    "email": "nate.abele@gmail.com",
+                    "name": "nateabele"
+                },
+                {
+                    "email": "proloser@hotmail.com",
+                    "name": "ProLoser"
+                },
+                {
+                    "email": "christopherthielen@sandgnat.com",
+                    "name": "christopherthielen"
+                }
+            ],
+            "name": "angular-ui-router",
+            "repository": {
+                "type": "git",
+                "url": "git+https://github.com/angular-ui/ui-router.git"
+            },
+            "scripts": {
+                
+            },
+            "version": "0.2.16"
+        },
+        "0.2.17": {
+            "_from": ".",
+            "_id": "angular-ui-router@0.2.17",
+            "_nodeVersion": "5.1.0",
+            "_npmUser": {
+                "email": "nate.abele@gmail.com",
+                "name": "nateabele"
+            },
+            "_npmVersion": "2.9.0",
+            "_shasum": "543ef94ce2ef5424d7b5946888913bce7737b80a",
+            "bugs": {
+                "url": "https://github.com/angular-ui/ui-router/issues"
+            },
+            "contributors": [
+                {
+                    "email": "nate@radify.io",
+                    "name": "Nate Abele",
+                    "url": "https://github.com/nateabele"
+                },
+                {
+                    "email": "christhielen@gmail.com",
+                    "name": "Chris Thielen",
+                    "url": "https://github.com/christopherthielen"
+                },
+                {
+                    "name": "Tim Kindberg",
+                    "url": "https://github.com/timkindberg"
+                },
+                {
+                    "name": "Karsten Sperling",
+                    "url": "https://github.com/ksperling"
+                }
+            ],
+            "dependencies": {
+                
+            },
+            "description": "State-based routing for AngularJS",
+            "devDependencies": {
+                "faithful-exec": "~0.1.0",
+                "grunt": "~0.4.1",
+                "grunt-contrib-clean": "~0.5.0",
+                "grunt-contrib-concat": "~0.3.0",
+                "grunt-contrib-connect": "~0.7.1",
+                "grunt-contrib-jshint": "~0.8.0",
+                "grunt-contrib-uglify": "~0.4.0",
+                "grunt-contrib-watch": "~0.5.3",
+                "grunt-conventional-changelog": "~1.1.0",
+                "grunt-karma": "~0.6.2",
+                "grunt-ngdocs": "~0.2.5",
+                "karma": "~0.10.4",
+                "karma-chrome-launcher": "~0.1.0",
+                "karma-coffee-preprocessor": "~0.1.0",
+                "karma-firefox-launcher": "~0.1.0",
+                "karma-html2js-preprocessor": "~0.1.0",
+                "karma-jasmine": "~0.1.3",
+                "karma-phantomjs-launcher": "~0.1.0",
+                "karma-requirejs": "~0.2.0",
+                "karma-script-launcher": "~0.1.0",
+                "load-grunt-tasks": "~0.4.0",
+                "requirejs": "^2.1.22",
+                "shelljs": "~0.2.6"
+            },
+            "directories": {
+                
+            },
+            "dist": {
+                "shasum": "543ef94ce2ef5424d7b5946888913bce7737b80a",
+                "tarball": "https://registry.npmjs.org/angular-ui-router/-/angular-ui-router-0.2.17.tgz"
+            },
+            "gitHead": "87f10dfc9c4b0420ae6128bb46499deb75f3e705",
+            "homepage": "http://angular-ui.github.com/",
+            "licenses": [
+                {
+                    "type": "MIT",
+                    "url": "https://github.com/angular-ui/ui-router/blob/master/LICENSE"
+                }
+            ],
+            "main": "release/angular-ui-router.js",
+            "maintainers": [
+                {
+                    "email": "nate.abele@gmail.com",
+                    "name": "nateabele"
+                },
+                {
+                    "email": "proloser@hotmail.com",
+                    "name": "ProLoser"
+                },
+                {
+                    "email": "christopherthielen@sandgnat.com",
+                    "name": "christopherthielen"
+                }
+            ],
+            "name": "angular-ui-router",
+            "repository": {
+                "type": "git",
+                "url": "git+https://github.com/angular-ui/ui-router.git"
+            },
+            "scripts": {
+                
+            },
+            "version": "0.2.17"
+        },
+        "0.2.18": {
+            "_from": ".",
+            "_id": "angular-ui-router@0.2.18",
+            "_nodeVersion": "5.4.0",
+            "_npmOperationalInternal": {
+                "host": "packages-5-east.internal.npmjs.com",
+                "tmp": "tmp/angular-ui-router-0.2.18.tgz_1454862455574_0.3742834459990263"
+            },
+            "_npmUser": {
+                "email": "christopherthielen@ikkyikkyikkypikangzoopboing.com",
+                "name": "christopherthielen"
+            },
+            "_npmVersion": "3.3.12",
+            "_shasum": "1dad70415c73d7046fd2e130df03d62fb7464360",
+            "bugs": {
+                "url": "https://github.com/angular-ui/ui-router/issues"
+            },
+            "contributors": [
+                {
+                    "email": "nate@radify.io",
+                    "name": "Nate Abele",
+                    "url": "https://github.com/nateabele"
+                },
+                {
+                    "email": "christhielen@gmail.com",
+                    "name": "Chris Thielen",
+                    "url": "https://github.com/christopherthielen"
+                },
+                {
+                    "name": "Tim Kindberg",
+                    "url": "https://github.com/timkindberg"
+                },
+                {
+                    "name": "Karsten Sperling",
+                    "url": "https://github.com/ksperling"
+                }
+            ],
+            "dependencies": {
+                "angular": "^1.0.8"
+            },
+            "description": "State-based routing for AngularJS",
+            "devDependencies": {
+                "faithful-exec": "~0.1.0",
+                "grunt": "~0.4.1",
+                "grunt-contrib-clean": "~0.5.0",
+                "grunt-contrib-concat": "~0.3.0",
+                "grunt-contrib-connect": "~0.7.1",
+                "grunt-contrib-jshint": "~0.8.0",
+                "grunt-contrib-uglify": "~0.4.0",
+                "grunt-contrib-watch": "~0.5.3",
+                "grunt-conventional-changelog": "~1.1.0",
+                "grunt-karma": "~0.6.2",
+                "grunt-ngdocs": "~0.2.5",
+                "karma": "~0.10.4",
+                "karma-chrome-launcher": "~0.1.0",
+                "karma-coffee-preprocessor": "~0.1.0",
+                "karma-firefox-launcher": "~0.1.0",
+                "karma-html2js-preprocessor": "~0.1.0",
+                "karma-jasmine": "~0.1.3",
+                "karma-phantomjs-launcher": "~0.1.0",
+                "karma-requirejs": "~0.2.0",
+                "karma-script-launcher": "~0.1.0",
+                "load-grunt-tasks": "~0.4.0",
+                "phantomjs-polyfill": "0.0.1",
+                "requirejs": "^2.1.22",
+                "shelljs": "~0.2.6"
+            },
+            "directories": {
+                
+            },
+            "dist": {
+                "shasum": "1dad70415c73d7046fd2e130df03d62fb7464360",
+                "tarball": "https://registry.npmjs.org/angular-ui-router/-/angular-ui-router-0.2.18.tgz"
+            },
+            "gitHead": "ec6ca36b625e578e59e631b3c9e786a6ac70678c",
+            "homepage": "http://angular-ui.github.com/",
+            "license": "MIT",
+            "licenses": [
+                {
+                    "type": "MIT",
+                    "url": "https://github.com/angular-ui/ui-router/blob/master/LICENSE"
+                }
+            ],
+            "main": "release/angular-ui-router.js",
+            "maintainers": [
+                {
+                    "email": "nate.abele@gmail.com",
+                    "name": "nateabele"
+                },
+                {
+                    "email": "proloser@hotmail.com",
+                    "name": "ProLoser"
+                },
+                {
+                    "email": "christopherthielen@sandgnat.com",
+                    "name": "christopherthielen"
+                }
+            ],
+            "name": "angular-ui-router",
+            "repository": {
+                "type": "git",
+                "url": "git+https://github.com/angular-ui/ui-router.git"
+            },
+            "scripts": {
+                
+            },
+            "version": "0.2.18"
+        },
+        "0.2.7": {
+            "_from": ".",
+            "_id": "angular-ui-router@0.2.7",
+            "_npmUser": {
+                "email": "me@maxedmands.com",
+                "name": "demands"
+            },
+            "_npmVersion": "1.3.11",
+            "bugs": {
+                "url": "https://github.com/angular-ui/ui-router/issues"
+            },
+            "contributors": [
+                {
+                    "email": "nate@unionofrad.com",
+                    "name": "Nate Abele",
+                    "url": "https://github.com/nateabele"
+                },
+                {
+                    "name": "Tim Kindberg",
+                    "url": "https://github.com/timkindberg"
+                },
+                {
+                    "name": "Karsten Sperling",
+                    "url": "https://github.com/ksperling"
+                }
+            ],
+            "dependencies": {
+                
+            },
+            "description": "State-based routing for AngularJS",
+            "devDependencies": {
+                "faithful-exec": "~0.1.0",
+                "grunt": "~0.4.1",
+                "grunt-contrib-clean": "~0.5.0",
+                "grunt-contrib-concat": "~0.3.0",
+                "grunt-contrib-connect": "~0.5.0",
+                "grunt-contrib-jshint": "~0.7.1",
+                "grunt-contrib-uglify": "~0.2.7",
+                "grunt-contrib-watch": "~0.5.3",
+                "grunt-conventional-changelog": "~1.0.0",
+                "grunt-karma": "~0.6.2",
+                "grunt-ngdocs": "~0.1.7",
+                "jsdoc": "git://github.com/jsdoc3/jsdoc.git#v3.2.2",
+                "karma": "~0.10.4",
+                "karma-chrome-launcher": "~0.1.0",
+                "karma-coffee-preprocessor": "~0.1.0",
+                "karma-firefox-launcher": "~0.1.0",
+                "karma-html2js-preprocessor": "~0.1.0",
+                "karma-jasmine": "~0.1.3",
+                "karma-phantomjs-launcher": "~0.1.0",
+                "karma-requirejs": "~0.2.0",
+                "karma-script-launcher": "~0.1.0",
+                "load-grunt-tasks": "~0.2.0",
+                "shelljs": "~0.2.6"
+            },
+            "directories": {
+                
+            },
+            "dist": {
+                "shasum": "1e22d57e51e31caa00f4490e43bd266d8714e681",
+                "tarball": "https://registry.npmjs.org/angular-ui-router/-/angular-ui-router-0.2.7.tgz"
+            },
+            "homepage": "http://angular-ui.github.com/",
+            "licenses": [
+                {
+                    "type": "MIT",
+                    "url": "https://github.com/angular-ui/ui-router/blob/master/LICENSE"
+                }
+            ],
+            "maintainers": [
+                {
+                    "email": "me@maxedmands.com",
+                    "name": "demands"
+                }
+            ],
+            "name": "angular-ui-router",
+            "repository": {
+                "type": "git",
+                "url": "https://github.com/angular-ui/ui-router.git"
+            },
+            "version": "0.2.7"
+        },
+        "0.2.8": {
+            "_from": ".",
+            "_id": "angular-ui-router@0.2.8",
+            "_npmUser": {
+                "email": "me@maxedmands.com",
+                "name": "demands"
+            },
+            "_npmVersion": "1.3.11",
+            "bugs": {
+                "url": "https://github.com/angular-ui/ui-router/issues"
+            },
+            "contributors": [
+                {
+                    "email": "nate@unionofrad.com",
+                    "name": "Nate Abele",
+                    "url": "https://github.com/nateabele"
+                },
+                {
+                    "name": "Tim Kindberg",
+                    "url": "https://github.com/timkindberg"
+                },
+                {
+                    "name": "Karsten Sperling",
+                    "url": "https://github.com/ksperling"
+                }
+            ],
+            "dependencies": {
+                
+            },
+            "description": "State-based routing for AngularJS",
+            "devDependencies": {
+                "faithful-exec": "~0.1.0",
+                "grunt": "~0.4.1",
+                "grunt-contrib-clean": "~0.5.0",
+                "grunt-contrib-concat": "~0.3.0",
+                "grunt-contrib-connect": "~0.5.0",
+                "grunt-contrib-jshint": "~0.7.1",
+                "grunt-contrib-uglify": "~0.2.7",
+                "grunt-contrib-watch": "~0.5.3",
+                "grunt-conventional-changelog": "~1.0.0",
+                "grunt-karma": "~0.6.2",
+                "grunt-ngdocs": "~0.1.7",
+                "jsdoc": "git://github.com/jsdoc3/jsdoc.git#v3.2.2",
+                "karma": "~0.10.4",
+                "karma-chrome-launcher": "~0.1.0",
+                "karma-coffee-preprocessor": "~0.1.0",
+                "karma-firefox-launcher": "~0.1.0",
+                "karma-html2js-preprocessor": "~0.1.0",
+                "karma-jasmine": "~0.1.3",
+                "karma-phantomjs-launcher": "~0.1.0",
+                "karma-requirejs": "~0.2.0",
+                "karma-script-launcher": "~0.1.0",
+                "load-grunt-tasks": "~0.2.0",
+                "shelljs": "~0.2.6"
+            },
+            "directories": {
+                
+            },
+            "dist": {
+                "shasum": "b26510495819dd46f925234b8d5d17a1ce4937b9",
+                "tarball": "https://registry.npmjs.org/angular-ui-router/-/angular-ui-router-0.2.8.tgz"
+            },
+            "homepage": "http://angular-ui.github.com/",
+            "licenses": [
+                {
+                    "type": "MIT",
+                    "url": "https://github.com/angular-ui/ui-router/blob/master/LICENSE"
+                }
+            ],
+            "maintainers": [
+                {
+                    "email": "me@maxedmands.com",
+                    "name": "demands"
+                }
+            ],
+            "name": "angular-ui-router",
+            "repository": {
+                "type": "git",
+                "url": "https://github.com/angular-ui/ui-router.git"
+            },
+            "version": "0.2.8"
+        },
+        "0.3.0": {
+            "_from": ".",
+            "_id": "angular-ui-router@0.3.0",
+            "_nodeVersion": "5.4.0",
+            "_npmOperationalInternal": {
+                "host": "packages-12-west.internal.npmjs.com",
+                "tmp": "tmp/angular-ui-router-0.3.0.tgz_1463267618102_0.5207048587035388"
+            },
+            "_npmUser": {
+                "email": "christopherthielen@ikkyikkyikkypikangzoopboing.com",
+                "name": "christopherthielen"
+            },
+            "_npmVersion": "3.8.5",
+            "_shasum": "f45cca21abe05049cd151bf34a8d82934eb99e98",
+            "bugs": {
+                "url": "https://github.com/angular-ui/ui-router/issues"
+            },
+            "contributors": [
+                {
+                    "email": "nate@radify.io",
+                    "name": "Nate Abele",
+                    "url": "https://github.com/nateabele"
+                },
+                {
+                    "email": "christhielen@gmail.com",
+                    "name": "Chris Thielen",
+                    "url": "https://github.com/christopherthielen"
+                },
+                {
+                    "name": "Tim Kindberg",
+                    "url": "https://github.com/timkindberg"
+                },
+                {
+                    "name": "Karsten Sperling",
+                    "url": "https://github.com/ksperling"
+                }
+            ],
+            "dependencies": {
+                "angular": "^1.0.8"
+            },
+            "description": "State-based routing for AngularJS",
+            "devDependencies": {
+                "faithful-exec": "~0.1.0",
+                "grunt": "~0.4.1",
+                "grunt-contrib-clean": "~0.5.0",
+                "grunt-contrib-concat": "~0.3.0",
+                "grunt-contrib-connect": "~0.7.1",
+                "grunt-contrib-jshint": "~0.8.0",
+                "grunt-contrib-uglify": "~0.4.0",
+                "grunt-contrib-watch": "~0.5.3",
+                "grunt-conventional-changelog": "~1.1.0",
+                "grunt-karma": "~0.6.2",
+                "grunt-ngdocs": "~0.2.5",
+                "karma": "~0.10.4",
+                "karma-chrome-launcher": "~0.1.0",
+                "karma-coffee-preprocessor": "~0.1.0",
+                "karma-firefox-launcher": "~0.1.0",
+                "karma-html2js-preprocessor": "~0.1.0",
+                "karma-jasmine": "~0.1.3",
+                "karma-phantomjs-launcher": "~0.1.0",
+                "karma-requirejs": "~0.2.0",
+                "karma-script-launcher": "~0.1.0",
+                "load-grunt-tasks": "~0.4.0",
+                "phantomjs-polyfill": "0.0.1",
+                "requirejs": "^2.1.22",
+                "shelljs": "~0.2.6"
+            },
+            "directories": {
+                
+            },
+            "dist": {
+                "shasum": "f45cca21abe05049cd151bf34a8d82934eb99e98",
+                "tarball": "https://registry.npmjs.org/angular-ui-router/-/angular-ui-router-0.3.0.tgz"
+            },
+            "gitHead": "d2a0feb9827e79f4dca6f30e67a37535c6841386",
+            "homepage": "http://angular-ui.github.com/",
+            "license": "MIT",
+            "licenses": [
+                {
+                    "type": "MIT",
+                    "url": "https://github.com/angular-ui/ui-router/blob/master/LICENSE"
+                }
+            ],
+            "main": "release/angular-ui-router.js",
+            "maintainers": [
+                {
+                    "email": "nate.abele@gmail.com",
+                    "name": "nateabele"
+                },
+                {
+                    "email": "proloser@hotmail.com",
+                    "name": "ProLoser"
+                },
+                {
+                    "email": "christopherthielen@sandgnat.com",
+                    "name": "christopherthielen"
+                }
+            ],
+            "name": "angular-ui-router",
+            "repository": {
+                "type": "git",
+                "url": "git+https://github.com/angular-ui/ui-router.git"
+            },
+            "scripts": {
+                
+            },
+            "version": "0.3.0"
+        },
+        "0.3.1": {
+            "_from": ".",
+            "_id": "angular-ui-router@0.3.1",
+            "_nodeVersion": "5.4.0",
+            "_npmOperationalInternal": {
+                "host": "packages-16-east.internal.npmjs.com",
+                "tmp": "tmp/angular-ui-router-0.3.1.tgz_1464987915784_0.7359193146694452"
+            },
+            "_npmUser": {
+                "email": "christopherthielen@ikkyikkyikkypikangzoopboing.com",
+                "name": "christopherthielen"
+            },
+            "_npmVersion": "3.8.5",
+            "_shasum": "914678eeeb4545defc786cf12d0d1994246a3e8a",
+            "bugs": {
+                "url": "https://github.com/angular-ui/ui-router/issues"
+            },
+            "contributors": [
+                {
+                    "email": "nate@radify.io",
+                    "name": "Nate Abele",
+                    "url": "https://github.com/nateabele"
+                },
+                {
+                    "email": "christhielen@gmail.com",
+                    "name": "Chris Thielen",
+                    "url": "https://github.com/christopherthielen"
+                },
+                {
+                    "name": "Tim Kindberg",
+                    "url": "https://github.com/timkindberg"
+                },
+                {
+                    "name": "Karsten Sperling",
+                    "url": "https://github.com/ksperling"
+                }
+            ],
+            "dependencies": {
+                "angular": "^1.0.8"
+            },
+            "description": "State-based routing for AngularJS",
+            "devDependencies": {
+                "faithful-exec": "~0.1.0",
+                "grunt": "~0.4.1",
+                "grunt-contrib-clean": "~0.5.0",
+                "grunt-contrib-concat": "~0.3.0",
+                "grunt-contrib-connect": "~0.7.1",
+                "grunt-contrib-jshint": "~0.8.0",
+                "grunt-contrib-uglify": "~0.4.0",
+                "grunt-contrib-watch": "~0.5.3",
+                "grunt-conventional-changelog": "~1.1.0",
+                "grunt-karma": "~0.6.2",
+                "grunt-ngdocs": "~0.2.5",
+                "karma": "~0.10.4",
+                "karma-chrome-launcher": "~0.1.0",
+                "karma-coffee-preprocessor": "~0.1.0",
+                "karma-firefox-launcher": "~0.1.0",
+                "karma-html2js-preprocessor": "~0.1.0",
+                "karma-jasmine": "~0.1.3",
+                "karma-phantomjs-launcher": "~0.1.0",
+                "karma-requirejs": "~0.2.0",
+                "karma-script-launcher": "~0.1.0",
+                "load-grunt-tasks": "~0.4.0",
+                "phantomjs-polyfill": "0.0.1",
+                "requirejs": "^2.1.22",
+                "shelljs": "~0.2.6"
+            },
+            "directories": {
+                
+            },
+            "dist": {
+                "shasum": "914678eeeb4545defc786cf12d0d1994246a3e8a",
+                "tarball": "https://registry.npmjs.org/angular-ui-router/-/angular-ui-router-0.3.1.tgz"
+            },
+            "gitHead": "6ac1c61991121f5324f99089003314bba3bc6a95",
+            "homepage": "http://angular-ui.github.com/",
+            "license": "MIT",
+            "licenses": [
+                {
+                    "type": "MIT",
+                    "url": "https://github.com/angular-ui/ui-router/blob/master/LICENSE"
+                }
+            ],
+            "main": "release/angular-ui-router.js",
+            "maintainers": [
+                {
+                    "email": "nate.abele@gmail.com",
+                    "name": "nateabele"
+                },
+                {
+                    "email": "proloser@hotmail.com",
+                    "name": "ProLoser"
+                },
+                {
+                    "email": "christopherthielen@sandgnat.com",
+                    "name": "christopherthielen"
+                }
+            ],
+            "name": "angular-ui-router",
+            "repository": {
+                "type": "git",
+                "url": "git+https://github.com/angular-ui/ui-router.git"
+            },
+            "scripts": {
+                
+            },
+            "version": "0.3.1"
+        },
+        "1.0.0-alpha.1": {
+            "_from": ".",
+            "_id": "angular-ui-router@1.0.0-alpha.1",
+            "_nodeVersion": "5.4.0",
+            "_npmOperationalInternal": {
+                "host": "packages-12-west.internal.npmjs.com",
+                "tmp": "tmp/angular-ui-router-1.0.0-alpha.1.tgz_1459113331140_0.46410844987258315"
+            },
+            "_npmUser": {
+                "email": "christopherthielen@ikkyikkyikkypikangzoopboing.com",
+                "name": "christopherthielen"
+            },
+            "_npmVersion": "3.3.12",
+            "_shasum": "0869ea2cdd8bfed0ea170f8ecc2f017922f2404b",
+            "bugs": {
+                "url": "https://github.com/angular-ui/ui-router/issues"
+            },
+            "contributors": [
+                {
+                    "email": "nate@radify.io",
+                    "name": "Nate Abele",
+                    "url": "https://radify.io"
+                },
+                {
+                    "name": "Chris Thielen",
+                    "url": "https://github.com/christopherthielen"
+                },
+                {
+                    "name": "Tim Kindberg",
+                    "url": "https://github.com/timkindberg"
+                },
+                {
+                    "name": "Karsten Sperling",
+                    "url": "https://github.com/ksperling"
+                }
+            ],
+            "description": "State-based routing for AngularJS",
+            "directories": {
+                
+            },
+            "dist": {
+                "shasum": "0869ea2cdd8bfed0ea170f8ecc2f017922f2404b",
+                "tarball": "https://registry.npmjs.org/angular-ui-router/-/angular-ui-router-1.0.0-alpha.1.tgz"
+            },
+            "engines": {
+                "node": ">4"
+            },
+            "homepage": "http://angular-ui.github.com/ui-router",
+            "license": "MIT",
+            "main": "release/angular-ui-router.js",
+            "maintainers": [
+                {
+                    "email": "nate.abele@gmail.com",
+                    "name": "nateabele"
+                },
+                {
+                    "email": "proloser@hotmail.com",
+                    "name": "ProLoser"
+                },
+                {
+                    "email": "christopherthielen@sandgnat.com",
+                    "name": "christopherthielen"
+                }
+            ],
+            "name": "angular-ui-router",
+            "peerDependencies": {
+                "angular": ">1.2 <2.0"
+            },
+            "repository": {
+                "type": "git",
+                "url": "git+https://github.com/angular-ui/ui-router.git"
+            },
+            "scripts": {
+                
+            },
+            "typings": "commonjs/ng1.d.ts",
+            "version": "1.0.0-alpha.1"
+        },
+        "1.0.0-alpha.2": {
+            "_from": ".",
+            "_id": "angular-ui-router@1.0.0-alpha.2",
+            "_nodeVersion": "5.4.0",
+            "_npmOperationalInternal": {
+                "host": "packages-12-west.internal.npmjs.com",
+                "tmp": "tmp/angular-ui-router-1.0.0-alpha.2.tgz_1459665301997_0.028075403068214655"
+            },
+            "_npmUser": {
+                "email": "christopherthielen@ikkyikkyikkypikangzoopboing.com",
+                "name": "christopherthielen"
+            },
+            "_npmVersion": "3.8.5",
+            "_shasum": "391a6dbae119e1ab8a603b35437fd3381ed0fec2",
+            "bugs": {
+                "url": "https://github.com/angular-ui/ui-router/issues"
+            },
+            "contributors": [
+                {
+                    "email": "nate@radify.io",
+                    "name": "Nate Abele",
+                    "url": "https://radify.io"
+                },
+                {
+                    "name": "Chris Thielen",
+                    "url": "https://github.com/christopherthielen"
+                },
+                {
+                    "name": "Tim Kindberg",
+                    "url": "https://github.com/timkindberg"
+                },
+                {
+                    "name": "Karsten Sperling",
+                    "url": "https://github.com/ksperling"
+                }
+            ],
+            "description": "State-based routing for AngularJS",
+            "directories": {
+                
+            },
+            "dist": {
+                "shasum": "391a6dbae119e1ab8a603b35437fd3381ed0fec2",
+                "tarball": "https://registry.npmjs.org/angular-ui-router/-/angular-ui-router-1.0.0-alpha.2.tgz"
+            },
+            "engines": {
+                "node": ">4"
+            },
+            "homepage": "http://angular-ui.github.com/ui-router",
+            "license": "MIT",
+            "main": "release/angular-ui-router.js",
+            "maintainers": [
+                {
+                    "email": "nate.abele@gmail.com",
+                    "name": "nateabele"
+                },
+                {
+                    "email": "proloser@hotmail.com",
+                    "name": "ProLoser"
+                },
+                {
+                    "email": "christopherthielen@sandgnat.com",
+                    "name": "christopherthielen"
+                }
+            ],
+            "name": "angular-ui-router",
+            "peerDependencies": {
+                "angular": ">1.2 <2.0"
+            },
+            "repository": {
+                "type": "git",
+                "url": "git+https://github.com/angular-ui/ui-router.git"
+            },
+            "scripts": {
+                
+            },
+            "typings": "commonjs/ng1.d.ts",
+            "version": "1.0.0-alpha.2"
+        },
+        "1.0.0-alpha.3": {
+            "_from": ".",
+            "_id": "angular-ui-router@1.0.0-alpha.3",
+            "_nodeVersion": "5.4.0",
+            "_npmOperationalInternal": {
+                "host": "packages-12-west.internal.npmjs.com",
+                "tmp": "tmp/angular-ui-router-1.0.0-alpha.3.tgz_1459666780485_0.9736160261090845"
+            },
+            "_npmUser": {
+                "email": "christopherthielen@ikkyikkyikkypikangzoopboing.com",
+                "name": "christopherthielen"
+            },
+            "_npmVersion": "3.8.5",
+            "_shasum": "7c66ee998ccc752c547d5877002cfe60d6bb8cc4",
+            "bugs": {
+                "url": "https://github.com/angular-ui/ui-router/issues"
+            },
+            "contributors": [
+                {
+                    "email": "nate@radify.io",
+                    "name": "Nate Abele",
+                    "url": "https://radify.io"
+                },
+                {
+                    "name": "Chris Thielen",
+                    "url": "https://github.com/christopherthielen"
+                },
+                {
+                    "name": "Tim Kindberg",
+                    "url": "https://github.com/timkindberg"
+                },
+                {
+                    "name": "Karsten Sperling",
+                    "url": "https://github.com/ksperling"
+                }
+            ],
+            "description": "State-based routing for AngularJS",
+            "directories": {
+                
+            },
+            "dist": {
+                "shasum": "7c66ee998ccc752c547d5877002cfe60d6bb8cc4",
+                "tarball": "https://registry.npmjs.org/angular-ui-router/-/angular-ui-router-1.0.0-alpha.3.tgz"
+            },
+            "engines": {
+                "node": ">4"
+            },
+            "homepage": "http://angular-ui.github.com/ui-router",
+            "license": "MIT",
+            "main": "release/angular-ui-router.js",
+            "maintainers": [
+                {
+                    "email": "nate.abele@gmail.com",
+                    "name": "nateabele"
+                },
+                {
+                    "email": "proloser@hotmail.com",
+                    "name": "ProLoser"
+                },
+                {
+                    "email": "christopherthielen@sandgnat.com",
+                    "name": "christopherthielen"
+                }
+            ],
+            "name": "angular-ui-router",
+            "peerDependencies": {
+                "angular": ">1.2 <2.0"
+            },
+            "repository": {
+                "type": "git",
+                "url": "git+https://github.com/angular-ui/ui-router.git"
+            },
+            "scripts": {
+                
+            },
+            "typings": "commonjs/ng1.d.ts",
+            "version": "1.0.0-alpha.3"
+        },
+        "1.0.0-alpha.4": {
+            "_from": ".",
+            "_id": "angular-ui-router@1.0.0-alpha.4",
+            "_nodeVersion": "5.4.0",
+            "_npmOperationalInternal": {
+                "host": "packages-12-west.internal.npmjs.com",
+                "tmp": "tmp/angular-ui-router-1.0.0-alpha.4.tgz_1459919205215_0.4216675595380366"
+            },
+            "_npmUser": {
+                "email": "christopherthielen@ikkyikkyikkypikangzoopboing.com",
+                "name": "christopherthielen"
+            },
+            "_npmVersion": "3.8.5",
+            "_shasum": "2ef99e114d6af1cc680c9b2dcf2273ba4c5bbb5a",
+            "bugs": {
+                "url": "https://github.com/angular-ui/ui-router/issues"
+            },
+            "contributors": [
+                {
+                    "email": "nate@radify.io",
+                    "name": "Nate Abele",
+                    "url": "https://radify.io"
+                },
+                {
+                    "name": "Chris Thielen",
+                    "url": "https://github.com/christopherthielen"
+                },
+                {
+                    "name": "Tim Kindberg",
+                    "url": "https://github.com/timkindberg"
+                },
+                {
+                    "name": "Karsten Sperling",
+                    "url": "https://github.com/ksperling"
+                }
+            ],
+            "description": "State-based routing for AngularJS",
+            "directories": {
+                
+            },
+            "dist": {
+                "shasum": "2ef99e114d6af1cc680c9b2dcf2273ba4c5bbb5a",
+                "tarball": "https://registry.npmjs.org/angular-ui-router/-/angular-ui-router-1.0.0-alpha.4.tgz"
+            },
+            "engines": {
+                "node": ">4"
+            },
+            "homepage": "http://angular-ui.github.com/ui-router",
+            "license": "MIT",
+            "main": "release/angular-ui-router.js",
+            "maintainers": [
+                {
+                    "email": "nate.abele@gmail.com",
+                    "name": "nateabele"
+                },
+                {
+                    "email": "proloser@hotmail.com",
+                    "name": "ProLoser"
+                },
+                {
+                    "email": "christopherthielen@sandgnat.com",
+                    "name": "christopherthielen"
+                }
+            ],
+            "name": "angular-ui-router",
+            "peerDependencies": {
+                "angular": ">1.2 <2.0"
+            },
+            "repository": {
+                "type": "git",
+                "url": "git+https://github.com/angular-ui/ui-router.git"
+            },
+            "scripts": {
+                
+            },
+            "typings": "commonjs/ng1.d.ts",
+            "version": "1.0.0-alpha.4"
+        },
+        "1.0.0-alpha.5": {
+            "_from": ".",
+            "_id": "angular-ui-router@1.0.0-alpha.5",
+            "_nodeVersion": "5.4.0",
+            "_npmOperationalInternal": {
+                "host": "packages-16-east.internal.npmjs.com",
+                "tmp": "tmp/angular-ui-router-1.0.0-alpha.5.tgz_1463103401077_0.8674328911583871"
+            },
+            "_npmUser": {
+                "email": "christopherthielen@ikkyikkyikkypikangzoopboing.com",
+                "name": "christopherthielen"
+            },
+            "_npmVersion": "3.8.5",
+            "_shasum": "9a2d3d7b1595d5130c314bcc86082ce1f2efc229",
+            "bugs": {
+                "url": "https://github.com/angular-ui/ui-router/issues"
+            },
+            "contributors": [
+                {
+                    "email": "nate@radify.io",
+                    "name": "Nate Abele",
+                    "url": "https://radify.io"
+                },
+                {
+                    "name": "Chris Thielen",
+                    "url": "https://github.com/christopherthielen"
+                },
+                {
+                    "name": "Tim Kindberg",
+                    "url": "https://github.com/timkindberg"
+                },
+                {
+                    "name": "Karsten Sperling",
+                    "url": "https://github.com/ksperling"
+                }
+            ],
+            "description": "State-based routing for AngularJS",
+            "directories": {
+                
+            },
+            "dist": {
+                "shasum": "9a2d3d7b1595d5130c314bcc86082ce1f2efc229",
+                "tarball": "https://registry.npmjs.org/angular-ui-router/-/angular-ui-router-1.0.0-alpha.5.tgz"
+            },
+            "engines": {
+                "node": ">4"
+            },
+            "homepage": "http://angular-ui.github.com/ui-router",
+            "license": "MIT",
+            "main": "release/angular-ui-router.js",
+            "maintainers": [
+                {
+                    "email": "nate.abele@gmail.com",
+                    "name": "nateabele"
+                },
+                {
+                    "email": "proloser@hotmail.com",
+                    "name": "ProLoser"
+                },
+                {
+                    "email": "christopherthielen@sandgnat.com",
+                    "name": "christopherthielen"
+                }
+            ],
+            "name": "angular-ui-router",
+            "peerDependencies": {
+                "angular": ">1.2 <2.0"
+            },
+            "repository": {
+                "type": "git",
+                "url": "git+https://github.com/angular-ui/ui-router.git"
+            },
+            "scripts": {
+                
+            },
+            "typings": "commonjs/ng1.d.ts",
+            "version": "1.0.0-alpha.5"
+        }
+    }
+}

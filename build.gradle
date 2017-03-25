@@ -1,0 +1,128 @@
+buildscript {
+    repositories {
+        mavenCentral()		
+        mavenLocal()
+		maven { url "https://repo.grails.org/grails/core" }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.3.3.RELEASE")		
+		classpath("org.codehaus.groovy:groovy:2.4.6")
+		classpath("com.bertramlabs.plugins:asset-pipeline-gradle:2.7.4")
+		classpath("gradle.plugin.com.boxfuse.client:flyway-release:4.0")			
+    }
+}
+
+plugins {
+    id 'com.craigburke.client-dependencies' version '1.0.0-RC2'
+}
+
+apply plugin: 'groovy'
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'spring-boot'
+apply plugin: 'asset-pipeline'
+apply plugin: 'org.flywaydb.flyway'
+apply plugin: 'war'
+
+jar {
+    baseName = 'boot-demo'
+    version =  '0.1.0'
+}
+
+repositories {
+    mavenCentral()
+	mavenLocal()
+	maven { url "https://repo.grails.org/grails/core" }
+	jcenter()
+    maven { url "http://repo.spring.io/libs-snapshot" }
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+configurations {
+    providedRuntime
+}
+
+dependencies {    
+    compile("org.springframework.boot:spring-boot-starter-web")         
+	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+    compile("org.springframework.boot:spring-boot-starter-data-jpa")
+    compile("mysql:mysql-connector-java")
+	compile("org.flywaydb:flyway-core:4.0")
+	
+	//devtool
+	// compile("org.springframework.boot:spring-boot-devtools")
+		
+    //compile("org.codehaus.groovy:groovy")
+	compile group: 'org.codehaus.groovy', name: 'groovy', version: '2.4.6'
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+	compile("com.bertramlabs.plugins:asset-pipeline-spring-boot:2.7.4")
+	compile("javax.inject:javax.inject:1")
+	compile("org.springframework.boot:spring-boot-starter-security")
+	compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hibernate4', version: '2.7.4'
+	
+    testCompile("junit:junit")
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.11'
+}
+
+clientDependencies {
+
+	bower {
+        'jquery'('2.2.x', from:'dist') { 
+            include 'jquery.js'
+			include 'jquery.min.js'
+        }
+		'materialize'('0.97.x', from:'dist', into:'materialize'){
+			include "**"
+		}		
+		
+    }
+	
+	npm {
+		'angular'('1.5.x', into: 'angular') {
+			include 'angular.js' 
+			include 'angular.min.js'
+		}
+		'angular-resource'('1.5.x', into: 'angular') {
+			include 'angular-resource.js'
+			include 'angular-resource.min.js'
+		}
+		'angular-mocks'('1.5.x', into: 'angular') {
+			include 'angular-mocks.js'
+			include 'angular-mocks.min.js'
+		}		
+		'angular-ui-router'('0.2.18', into: 'angular'){
+			include 'angular-ui-router.js'
+			include 'angular-ui-router.min.js'
+		}
+		'angular-animate'('1.5.x', into: 'angular') {
+			include 'angular-animate.js'
+			include 'angular-animate.min.js'
+		}
+		'angular-cookies'('1.5.x', into: 'angular') {
+			include 'angular-cookies.js'
+			include 'angular-cookies.min.js'
+		}
+        
+	}
+
+	
+}
+
+assets {
+  minifyJs = true
+  minifyCss = true    
+}
+
+flyway {
+    driver = 'com.mysql.jdbc.Driver'
+    url = 'jdbc:mysql://localhost:3306/demo'
+    user = 'root'
+    password = 'root'    
+}

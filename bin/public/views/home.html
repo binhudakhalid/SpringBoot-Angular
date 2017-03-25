@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Spring Boot - Angular Routing</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<asset:stylesheet href="materialize/css/materialize.min.css" />
+<link rel="stylesheet"
+	href="/assets/materialize/css/materialize.min.css" />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+	rel="stylesheet">
+<style>
+.bullet-list li{
+	    list-style-type: disc;
+}
+</style>
+<script type="text/javascript">
+	window.contextPath = "${request.contextPath}";
+</script>
+</head>
+<body ng-app="home">
+<h1>scr/views/home</h1>
+
+	<!-- <ul class="nav navbar-nav navbar-collapse">
+				    <li ng-repeat="item in menu"><a href="#{{item.route}}">{{item.title}}</a> 
+				    </li>
+				</ul> -->
+	<nav>
+		<div class="container">
+			<div class="nav-wrapper">
+				<a href="#!" class="brand-logo">Spring Boot scr/views/home {{name}}</a>
+
+				<ul class="right hide-on-med-and-down">
+				
+				<li><a class="dropdown-button" href="#!"
+						data-activates="dropdown3">PlatForm<i class="material-icons right">arrow_drop_down</i></a>
+						<ul id="dropdown3" class="dropdown-content">
+							<li><a href="#plat/create">Createp</a></li>
+							<li><a href="#plat">Listp</a></li>
+							<li class="divider"></li>							
+							<li><a href="#/">Homep</a></li>
+						</ul>
+					</li>
+				
+				
+				
+				
+					<li><a class="dropdown-button" href="#!"
+						data-activates="dropdown2">Task<i class="material-icons right">arrow_drop_down</i></a>
+						<ul id="dropdown2" class="dropdown-content">
+							<li><a href="#task/create">Create1</a></li>
+							<li><a href="#task">List1</a></li>
+							<li class="divider"></li>							
+							<li><a href="#/">Home1</a></li>
+						</ul>
+					</li>
+					
+					
+					
+										
+					<li><a class="dropdown-button" href="#!"
+						data-activates="dropdown1">User2<i class="material-icons right">arrow_drop_down</i></a>
+						<ul id="dropdown1" class="dropdown-content">
+							<li><a href="#user/create">Create2</a></li>
+							<li><a href="#user">List2</a></li>
+							<li class="divider"></li>							
+							<li><a href="#/">Home2</a></li>
+						</ul>
+					</li>					
+					<li ng-if="!item.subItems">						
+						<a class="dropdown-button" href="#logout">Logout.out</a>						
+					</li>
+				</ul>				
+			</div>
+		</div>
+	</nav>
+	<div class="container">
+		<div ui-view></div>
+	</div>
+	<div class="footer" role="contentinfo"></div>
+
+	<script type="application/javascript" src="/assets/jquery/jquery.js"></script>
+	<script type="application/javascript" src="/assets/bootdemo/home.js"></script>
+	<script type="application/javascript"
+		src="/assets/materialize/js/materialize.min.js"></script>
+
+	<script>
+		$(function() {
+			$(".dropdown-button").dropdown();
+		})
+	</script>
+	<h1>index</h1>
+	<h1>Greeting</h1>
+<h1>:home:</h1>
+<div ng-show="authenticated" >
+<p>user.id = {{user.id}} </p>
+	<p>The ID is {{controller.greeting.id}}</p>
+	<p>The content is {{controller.greeting.content}}</p>
+</div>
+<div  ng-show="!authenticated">
+<p>user.id = {{user.id}} </p>
+	<p>Login to see your greeting  </p>
+	
+</div>
+	<h1></h1>
+	
+	
+	
+	
+	
+</body>
+</html>
+
+
+
